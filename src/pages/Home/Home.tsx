@@ -1,6 +1,9 @@
 import * as React from 'react';
 import './Home.css';
 
+// UI
+import ReactionPanel from '../../components/ReactionPanel/ReactionPanel';
+
 // Redux
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -26,7 +29,8 @@ class Home extends React.Component<PropsT> {
           <img src={logo} className="Home-logo" alt="logo" />
           <h2>Welcome to Moussypad</h2>
         </div>
-        <img style={{ padding: 50 }} onClick={this.handleClick} src={googleSignInButton} alt="sign-in-button" />
+        <ReactionPanel style={{ padding: 20}}/>
+        <img style={{ padding: 20 }} onClick={this.handleClick} src={googleSignInButton} alt="sign-in-button" />
       </div>
     );
   }
