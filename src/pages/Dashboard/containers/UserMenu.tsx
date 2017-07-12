@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 // Redux
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { authOnRequestSignOut, AuthOnRequestSignOutT } from '../../../redux/auth/actions';
 import { AppStateT, AuthStateT } from '../../../redux/store';
 
 // UI
@@ -10,7 +12,10 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
-type PropsT = { auth: AuthStateT };
+type PropsT = { 
+  auth: AuthStateT,
+  authOnRequestSignOut: () => AuthOnRequestSignOutT
+};
 
 type StateT = {
   open: boolean;
@@ -64,7 +69,7 @@ class UserMenu extends React.Component<PropsT, StateT> {
   }
 
   private handleTouchTap() {
-    gapi.auth2.getAuthInstance().signOut();
+    this.props.authOnRequestSignOut();
   }
 }
 
@@ -72,4 +77,8 @@ const mapStateToProps = (state: AppStateT) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, {})(UserMenu);
+const mapDispatchToProps = (dispatch: Dispatch<{}>) => ({
+  authOnRequestSignOut: () => dispatch(authOnRequestSignOut()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserMenu);

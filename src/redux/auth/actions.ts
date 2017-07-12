@@ -1,6 +1,10 @@
 import { Action } from 'redux';
 import { UserProfileT } from '../models/userProfile';
 
+export interface AuthOnRequestInitT extends Action {
+  type: 'AUTH_ON_REQUEST_INIT';
+}
+
 export interface AuthOnRequestSignInT extends Action {
   type: 'AUTH_ON_REQUEST_SIGNIN';
 }
@@ -10,7 +14,7 @@ export interface AuthOnRequestSignOutT extends Action {
 }
 
 export interface AuthOnProgressActionT extends Action {
-  type: 'AUTH_ON_PROGRESS';
+  type: 'AUTH_ON_PROCESS';
 }
 
 export interface AuthOnSuccessActionT extends Action {
@@ -23,6 +27,10 @@ export interface AuthOnFailureActionT extends Action {
   error: Error;
 }
 
+export function authOnRequestInit(): AuthOnRequestInitT {
+  return { type: 'AUTH_ON_REQUEST_INIT' };
+}
+
 export function authOnRequestSignIn(): AuthOnRequestSignInT {
   return { type: 'AUTH_ON_REQUEST_SIGNIN' };
 }
@@ -32,7 +40,7 @@ export function authOnRequestSignOut(): AuthOnRequestSignOutT {
 }
 
 export function authOnProgressAction(): AuthOnProgressActionT {
-  return { type: 'AUTH_ON_PROGRESS' };
+  return { type: 'AUTH_ON_PROCESS' };
 }
 
 export function authOnSuccessAction(userProfile: UserProfileT): AuthOnSuccessActionT {
@@ -44,7 +52,8 @@ export function authOnFailureAction(error: Error): AuthOnFailureActionT {
 }
  
 export type AuthActionsT
-  = AuthOnRequestSignInT
+  = AuthOnRequestInitT 
+  | AuthOnRequestSignInT
   | AuthOnRequestSignOutT
   | AuthOnProgressActionT
   | AuthOnSuccessActionT

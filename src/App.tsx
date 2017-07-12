@@ -1,25 +1,30 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
 
+// Pages
 import Home from './pages/Home/Home';
 import Dashboard from './pages/Dashboard/Dashboard';
 
+// Redux
+import { connect, Dispatch } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
 import { history, AuthStateT, AppStateT } from './redux/store';
 import {
+  authOnRequestInit, AuthOnRequestInitT,
+  authOnRequestSignIn, AuthOnRequestSignInT,
   authOnSuccessAction, AuthOnSuccessActionT,
   authOnProgressAction, AuthOnProgressActionT,
-  authOnFailureAction, AuthOnFailureActionT
+  authOnFailureAction, AuthOnFailureActionT,
 } from './redux/auth/actions';
 import { UserProfileT } from './redux/models/userProfile';
 
-import { GoogleApiAuth2 } from './services/google/googleApiAuth2';
-
-const auth2 = new GoogleApiAuth2();
+// Rxjs
+import 'rxjs/add/operator/mergeMap';
 
 type PropsT = {
   auth: AuthStateT;
+  authOnRequestInit: () => AuthOnRequestInitT,
+  authOnRequestSignIn: () => AuthOnRequestSignInT,
   authOnProgressAction: () => AuthOnProgressActionT;
   authOnSuccessAction: (userProfile: UserProfileT) => AuthOnSuccessActionT;
   authOnFailureAction: (err: Error) => AuthOnFailureActionT;
@@ -27,51 +32,38 @@ type PropsT = {
 
 class App extends React.Component<PropsT, {}> {
   componentDidMount() {
-    auth2.isInitAuthenticated$()
-      .then(isAuth => {
-        if (isAuth) {
-          const profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-          this.props.authOnSuccessAction({
-            username: profile.getName(),
-            imageURL: profile.getImageUrl()
-          });
-        } else {
-          this.props.authOnFailureAction(new Error('User does not login to Google'));
-        }
-
-        gapi.auth2.getAuthInstance().isSignedIn.listen(isSignedIn => {
-          if (isSignedIn) {
-            const profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-            this.props.authOnSuccessAction({
-              username: profile.getName(),
-              imageURL: profile.getImageUrl()
-            });
-          } else {
-            this.props.authOnFailureAction(new Error('User does not login to Google'));
-          }
-        });
-      })
-      .catch(e => this.props.authOnFailureAction(e));
+    this.props.authOnRequestInit();
   }
 
   render() {
     const current = this.props.auth.current;
 
     if (current === 'onProcess') {
-      return <h1>Loading...</h1>;
+      const style: React.CSSProperties = {
+        width: '100vw', 
+        height: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center'
+      };
+      return (
+        <div style={style}>
+          <img style={{ width: '20vmax'}} src="loading.gif" alt="loading" />
+        </div>
+      );
     }
 
     return (
       <ConnectedRouter history={history}>
         <div>
-          <Route 
-            exact 
-            path="/" 
-            render={() => current === 'onSuccess' ? <Redirect to={{ pathname: '/dashboard'}} /> : <Home />} 
+          <Route
+            exact
+            path="/"
+            render={() => current === 'onSuccess' ? <Redirect to={{ pathname: '/dashboard' }} /> : <Home />}
           />
-          <Route 
-            path="/dashboard" 
-            render={() => current === 'onSuccess' ? <Dashboard /> : <Redirect to={{ pathname: '/'}} />} 
+          <Route
+            path="/dashboard"
+            render={() => current === 'onSuccess' ? <Dashboard /> : <Redirect to={{ pathname: '/' }} />}
           />
         </div>
       </ConnectedRouter>
@@ -84,9 +76,11 @@ const mapStateToProps = (state: AppStateT) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<{}>) => ({
+  authOnRequestInit: () => dispatch(authOnRequestInit()),
+  authOnRequestSignIn: () => dispatch(authOnRequestSignIn()),
   authOnProgressAction: () => dispatch(authOnProgressAction()),
   authOnSuccessAction: (userProfile: UserProfileT) => dispatch(authOnSuccessAction(userProfile)),
-  authOnFailureAction: (err: Error) => dispatch(authOnFailureAction(err))
+  authOnFailureAction: (err: Error) => dispatch(authOnFailureAction(err)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

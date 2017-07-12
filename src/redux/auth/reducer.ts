@@ -19,11 +19,9 @@ export type AuthStateT = OnProcessT | OnSuccessT | OnFailureT;
 
 export function authReducer(state: AuthStateT = { current: 'onProcess' }, action: AuthActionsT) {
   switch (action.type) {
+    case 'AUTH_ON_REQUEST_INIT':
     case 'AUTH_ON_REQUEST_SIGNIN':
-      return {
-        current: 'onProcess'
-      };
-    case 'AUTH_ON_PROGRESS':
+    case 'AUTH_ON_PROCESS':
       return {
         current: 'onProcess'
       };

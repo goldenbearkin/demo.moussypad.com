@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Header from './containers/Header';
+import Header from './components/Header';
 
 class Dashboard extends React.Component {
   render() {
