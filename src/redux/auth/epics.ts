@@ -12,9 +12,11 @@ import 'rxjs/add/observable/of';
 
 const config = {
   apiKey: 'AIzaSyBjvY5R6s796cDFLOGygQ9pmVIclqGkhZw',
-  discoveryDocs: ['https://people.googleapis.com/$discovery/rest?version=v1'],
+  discoveryDocs: [
+    // 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
+  ],
   clientId: '172273720339-ojr1afhroua2d9vmg2a75pvd1663lho0.apps.googleusercontent.com',
-  scope: 'profile'
+  scope: 'profile https://www.googleapis.com/auth/drive.readonly'
 };
 
 const googleAuth2 = new GoogleAuth2(config);

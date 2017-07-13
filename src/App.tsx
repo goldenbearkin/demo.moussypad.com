@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
+// UI
+import Loading from './components/Loading/Loading';
+
 // Pages
 import Home from './pages/Home/Home';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -39,17 +42,8 @@ class App extends React.Component<PropsT, {}> {
     const current = this.props.auth.current;
 
     if (current === 'onProcess') {
-      const style: React.CSSProperties = {
-        width: '100vw', 
-        height: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center'
-      };
       return (
-        <div style={style}>
-          <img style={{ width: '20vmax'}} src="loading.gif" alt="loading" />
-        </div>
+        <Loading />
       );
     }
 

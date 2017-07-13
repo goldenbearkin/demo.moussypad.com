@@ -3,8 +3,8 @@ import * as React from 'react';
 // Redux
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { authOnRequestSignOut, AuthOnRequestSignOutT } from '../../../redux/auth/actions';
-import { AppStateT, AuthStateT } from '../../../redux/store';
+import { authOnRequestSignOut, AuthOnRequestSignOutT } from '../../../../redux/auth/actions';
+import { AppStateT, AuthStateT } from '../../../../redux/store';
 
 // UI
 import Avatar from 'material-ui/Avatar';
