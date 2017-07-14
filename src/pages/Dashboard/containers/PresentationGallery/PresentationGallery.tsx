@@ -80,7 +80,11 @@ class PresentationGallery extends React.Component<PropsT, StateT> {
       <GridTile
         key={presentation.presentationId}
         style={{ padding: 2 }}
-        containerElement={<PresentationCard thumbnailURL={presentation.thumbnailURL} />}
+        containerElement={
+          <PresentationCard 
+            thumbnailURL={presentation.thumbnailURL}
+            presentationId={presentation.presentationId} 
+          />}
       />
     ));
     return (

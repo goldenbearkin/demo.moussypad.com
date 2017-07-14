@@ -6,7 +6,7 @@ const happy = require('./happy.svg');
 const angry = require('./angry.svg');
 
 type PropsT = {
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
 };
 
 type StateT = {
